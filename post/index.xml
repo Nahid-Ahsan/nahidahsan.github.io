@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts | Suhail Najeeb</title>
+    <link>https://suhailnajeeb.github.io/post/</link>
+      <atom:link href="https://suhailnajeeb.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>Posts</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 25 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Posts</title>
+      <link>https://suhailnajeeb.github.io/post/</link>
+    </image>
+    
+    <item>
+      <title>SQL Fundamentals (Part 3/3)</title>
+      <link>https://suhailnajeeb.github.io/post/sql-fundamentals-part-3/</link>
+      <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://suhailnajeeb.github.io/post/sql-fundamentals-part-3/</guid>
+      <description>&lt;figure&gt;
+    &lt;img src=&#34;https://suhailnajeeb.github.io/img/sql/database.jpg&#34;&gt;
+    &lt;a href = &#34;https://www.pexels.com/photo/bandwidth-close-up-computer-connection-1148820/&#34; target = &#34;_blank&#34;&gt;
+    &lt;figcaption&gt;Photo by Panumas Nikhomkhai from Pexels&lt;/figcaption&gt;
+    &lt;/a&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;p&gt;This is the Part 3 of my SQL Fundamentals series, continuing from 
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-2&#34;&gt;Part 2&lt;/a&gt; where I discussed about matching string patterns, Ranges, Sets, Sorting, Grouping, Filtering etc. Part 3 of this series covers the following topics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Functions in SQL:
+&lt;ul&gt;
+&lt;li&gt;Aggregate/Column Functions: SUM, MIN, MAX, AVG&lt;/li&gt;
+&lt;li&gt;Scalar and String Functinos: ROUND, LENGTH, UCASE, DCASE&lt;/li&gt;
+&lt;li&gt;Date-Time Functions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Sub-Queries and Nested Selects&lt;/li&gt;
+&lt;li&gt;Working with Multiple Tables etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The following statemetns aren&amp;rsquo;t really descriptive if that is something you are looking for. Its mostly a collection of the basic syntaxes with some examples. This is the 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;link&lt;/a&gt; to the corresponding github repository. You will find some relevant example sql queries in the 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql/tree/master/problems&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Problems&lt;/a&gt; folder of the repository.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;functions-in-sql&#34;&gt;Functions in SQL:&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Built-in Functions&lt;/li&gt;
+&lt;li&gt;User Defined Functions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;aggregate-or-column-functions&#34;&gt;Aggregate or Column Functions&lt;/h1&gt;
+&lt;h2 id=&#34;sum-function&#34;&gt;Sum Function:&lt;/h2&gt;
+&lt;p&gt;Add up all values in a column&lt;/p&gt;
+&lt;h2 id=&#34;syntax&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;SUM(COLUMN_NAME)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples:&lt;/h2&gt;
+&lt;p&gt;Add all values in the SALEPRICE column&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select SUM(SALEPRICE) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Explicitly name the output column SUM_OF_SALEPRICE&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select SUM(SALEPRICE) as SUM_OF_SALEPRICE
+    from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;min-max-avg&#34;&gt;MIN, MAX, AVG&lt;/h1&gt;
+&lt;h2 id=&#34;min-returns-the-minimum-value&#34;&gt;Min: Returns the minimum value&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select MIN(ID) from PETSALE where ANIMAL = &#39;Dog&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;max-returns-the-maximum-value&#34;&gt;Max: Returns the maximum value&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select MAX(QUANTITY) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;average-return-the-average-value&#34;&gt;Average: Return the average value&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select AVG(SALEPRICE) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Mathematical operations can be performed between columns&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select AVG(SALEPRICE / QUANTITY) from PETSALE
+    where ANIMAL = &#39;Dog&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;scaler-and-string-functions&#34;&gt;Scaler and String Functions&lt;/h1&gt;
+&lt;h2 id=&#34;round&#34;&gt;ROUND()&lt;/h2&gt;
+&lt;p&gt;Round up or down every value in saleprice:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select ROUND(SALEPRICE) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Retrieve the length of each value in ANIMAL:&lt;/p&gt;
+&lt;h2 id=&#34;length&#34;&gt;LENGTH()&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select LENGTH(ANIMAL) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;ucase&#34;&gt;UCASE&lt;/h2&gt;
+&lt;p&gt;Retrieve ANIMAL values in Uppercase:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select UCASE(ANIMAL) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;dcase&#34;&gt;DCASE&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from PETSALE
+    where LCASE(ANIMAL) = &#39;cat&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;select distinct values:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select DISTINCT(UCASE(ANIMAL)) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;date-time-functions&#34;&gt;Date, Time Functions&lt;/h1&gt;
+&lt;h2 id=&#34;examples-1&#34;&gt;Examples:&lt;/h2&gt;
+&lt;p&gt;Extract the DAY portion from a date:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select DAY(SALEDATE) from PETSALE
+    where ANIMAL = &#39;Cat&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Get the number of sales during the month of May:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select COUNT(*) from PETSALE
+    where MONTH(SALEDATE) = &#39;05&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;datetime-arithmetic&#34;&gt;Date/Time Arithmetic:&lt;/h2&gt;
+&lt;p&gt;What date is it 3 days after each sale date?&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select (SALEDATE + 3 DAYS) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Special Registers:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CURRENT_DATE, CURRENT_TIME
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Find how many days have passed since each SALEDATE till now:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select (CURRENT_DATE - SALEDATE) from PETSALE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;sub-queries-and-nested-selects&#34;&gt;Sub-Queries and Nested Selects:&lt;/h1&gt;
+&lt;h2 id=&#34;sub-query&#34;&gt;Sub-Query:&lt;/h2&gt;
+&lt;p&gt;A Query inside another Query&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select COLUMN1 from TABLE
+    where COLUMN2 = (select MAX(COLUMN2) from TABLE)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example:&lt;/h2&gt;
+&lt;p&gt;Retrieve the list of employees who earn more than the average salary:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;THIS IS INCORRECT&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from employees
+    where salary &amp;gt; AVG(salary)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;You cannot aggregate functions like AVG() in the WHERE clause&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Solution&lt;/em&gt;: Use a sub-select expression.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select EMP_ID, F_NAME, L_NAME, SALARY
+    from employees
+    where salary &amp;gt;
+    (select AVG(SALARY) from employees);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;sub-queries-in-list-of-columns&#34;&gt;Sub-Queries in list of columns&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Substitute column name with a sub-query&lt;/li&gt;
+&lt;li&gt;Called Column Expressions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;THIS IS INCORRECT&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select EMP_ID, SALARY, AVG(SALARY) AS AVG_SALARY
+    from employees;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select EMP_ID, SALARY,
+    ( select AVG(SALARY) from employees)
+        AS AVG_SALARY
+    from employees;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;sub-queries-in-from-clause&#34;&gt;Sub-queries in FROM Clause&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Substitute the TABLE name with a sub-query&lt;/li&gt;
+&lt;li&gt;These are called Derived Tables or Table Expressions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from
+    ( select EMP_ID, F_NAME, L_NAME, DEP_ID
+        from employees) AS EMP4ALL;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;working-with-multiple-tables&#34;&gt;Working With Multiple Tables:&lt;/h1&gt;
+&lt;p&gt;Ways to access multiple tables in the same query:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sub-queries&lt;/li&gt;
+&lt;li&gt;Implicit JOIN&lt;/li&gt;
+&lt;li&gt;JOIN operators (INNER JOIN, OUTER JOIN, etc.)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;accessing-multiple-tables-with-sub-queries&#34;&gt;Accessing Multiple Tables with Sub-queries:&lt;/h2&gt;
+&lt;p&gt;Retrieve only the employee recrds that correspond to departmetns in the DEPARTMENTS table:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from employees
+    where DEP_ID IN
+        (select DEPT_ID_DEP from departments);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Retrieve only the list of employees from a specific location:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;EMPLOYEES table does not contain location information&lt;/li&gt;
+&lt;li&gt;Need to get location info from DEPARTMENTS table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from employees
+    where DEP_ID_IN
+        (select DEPT_ID_DEP from departments
+            where LOC_ID = &#39;L0002&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Retreive department ID and name for employees who earn more than $70,000&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select DEPT_ID_DEP, DEP_NAME from departments
+    where DEPT_ID_DEP IN
+        (select DEP_ID from employees
+            wehre SALARY &amp;gt; 70000)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;accessing-multiple-tables-with-implicit-join&#34;&gt;Accessing Multiple Tables with Implicit Join:&lt;/h2&gt;
+&lt;p&gt;Specify 2 Tables in the FROM clause:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from employees, departments;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The result is a full join (Cartesian Join)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Every row in the first table is joined with every row in the 2nd table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Limiting the result set:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from employees, departments
+    where employees.DEP_ID = 
+        departments.DEPT_ID_DEP;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Using shorter aliases for table names:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from employees E, departments D
+    where E.DEP_ID = D.DEPT_ID_DEP;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;See the department name for each employee:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select employees.EMP_ID, departments.DEPT_NAME
+    from employees E, departments D
+    where E.DEP_ID = D.DEPT_ID_DEP;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Column names can be pre-fixed by aliases also:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select E.EMP_ID, D.DEPT_NAME
+    from employees E, departments D
+    where E.DEP_ID = D.DEPT_ID_DEP;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can find some relevant SQL queries 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql/blob/master/problems/problemset_2.sql&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-1&#34;&gt;Link&lt;/a&gt; to &lt;strong&gt;Part 1&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-2&#34;&gt;Link&lt;/a&gt; to &lt;strong&gt;Part 2&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;This post ends this SQL Fundamentals series. I hope that you have found it helpful. Thank you for sticking till the end!&lt;/em&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SQL Fundamentals (Part 2/3)</title>
+      <link>https://suhailnajeeb.github.io/post/sql-fundamentals-part-2/</link>
+      <pubDate>Fri, 17 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://suhailnajeeb.github.io/post/sql-fundamentals-part-2/</guid>
+      <description>&lt;figure&gt;
+    &lt;img src=&#34;https://suhailnajeeb.github.io/img/sql/database.jpg&#34;&gt;
+    &lt;a href = &#34;https://www.pexels.com/photo/bandwidth-close-up-computer-connection-1148820/&#34; target = &#34;_blank&#34;&gt;
+    &lt;figcaption&gt;Photo by Panumas Nikhomkhai from Pexels&lt;/figcaption&gt;
+    &lt;/a&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;p&gt;This is the Part 2 of my SQL Fundamentals series, continuing from 
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-1&#34;&gt;Part 1&lt;/a&gt; where I discussed Creating Tables, Querying with SELECT and WHERE, introduced some useful functions like COUNT, DISTINCT, LIMIT and some DML statements - INSERT, UPDATE, DELETE Etc. Part 2 of this series covers the following topics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Matching String Patterns&lt;/li&gt;
+&lt;li&gt;Ranges&lt;/li&gt;
+&lt;li&gt;Sets&lt;/li&gt;
+&lt;li&gt;Sorting&lt;/li&gt;
+&lt;li&gt;Eliminating Duplicates&lt;/li&gt;
+&lt;li&gt;Grouping, Counting&lt;/li&gt;
+&lt;li&gt;Filtering Grouped results.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The following statemetns aren&amp;rsquo;t really descriptive if that is something you are looking for. Its mostly a collection of the basic syntaxes with some examples. This is the 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;link&lt;/a&gt; to the corresponding github repository. You will find some relevant example sql queries in the 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql/tree/master/problems&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Problems&lt;/a&gt; folder of the repository.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;string-patterns&#34;&gt;String Patterns&lt;/h1&gt;
+&lt;h2 id=&#34;matching-string&#34;&gt;Matching string:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select book_id, title from book
+    where book_id = &#39;B1&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;looking-for-string-patterns&#34;&gt;Looking for String Patterns:&lt;/h2&gt;
+&lt;p&gt;Display all authors with firstname starting with R&lt;br&gt;
+&lt;strong&gt;Predicate:&lt;/strong&gt; Like&lt;br&gt;
+&lt;strong&gt;Wildcard:&lt;/strong&gt; %&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select firstname from author
+    where firstname like &#39;R%&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;ranges&#34;&gt;Ranges:&lt;/h1&gt;
+&lt;h2 id=&#34;without-range&#34;&gt;Without Range:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select title, pages from book
+    where pages &amp;gt;= 290 and pages &amp;lt;= 300;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;retrieving-values-using-range&#34;&gt;Retrieving values using Range:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select title, pages from book
+    where pages between 290 and 300;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;sets&#34;&gt;Sets&lt;/h1&gt;
+&lt;h2 id=&#34;without-set-of-values&#34;&gt;Without set of values:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select firstname, lastname, country from author
+    where country = &#39;AU&#39; or country = &#39;BR&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;retrieving-rows-using-a-set-of-values&#34;&gt;Retrieving rows using a set of values:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select firstname, lastname, country from author
+    where country in (&#39;AU&#39;, &#39;BR&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;sorting-result-sets&#34;&gt;Sorting Result Sets:&lt;/h1&gt;
+&lt;h2 id=&#34;order-by-title-ascending-order&#34;&gt;Order by title (Ascending Order):&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select title from book
+    order by title;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;order-by-title-descending-order&#34;&gt;Order by title (Descending Order):&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select title from book
+    order by title desc;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;order-by-specifying-the-column-number&#34;&gt;Order by specifying the column number:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select title, pages from book
+    order by 2;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;distinct-clause-eliminating-duplicates&#34;&gt;Distinct Clause: (Eliminating Duplicates)&lt;/h2&gt;
+&lt;p&gt;List the unique countries:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select distinct(country) from author
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;count&#34;&gt;Count:&lt;/h1&gt;
+&lt;p&gt;Counting the number of countries:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select country, count(country) from author
+    group by country
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Counting the number of countries and giving the count column a name:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select country, count(country) as count
+    from author
+    group by country
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;having-clause&#34;&gt;Having Clause:&lt;/h2&gt;
+&lt;p&gt;Restricting the result set using &lt;strong&gt;having&lt;/strong&gt; clause.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Having clause is used with group-by clause only&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select country, count(country) as count
+    from author
+    group by country
+    having count(country) &amp;gt; 4
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;p&gt;You can find some relevant SQL queries 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql/blob/master/problems/problemset_2.sql&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-1&#34;&gt;Link&lt;/a&gt; to &lt;strong&gt;Part 1&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-3&#34;&gt;Link&lt;/a&gt; to &lt;strong&gt;Part 3&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;To be continued ..&lt;/em&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SQL Fundamentals (Part 1/3)</title>
+      <link>https://suhailnajeeb.github.io/post/sql-fundamentals-part-1/</link>
+      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://suhailnajeeb.github.io/post/sql-fundamentals-part-1/</guid>
+      <description>&lt;figure&gt;
+    &lt;img src=&#34;https://suhailnajeeb.github.io/img/sql/database.jpg&#34;&gt;
+    &lt;a href = &#34;https://www.pexels.com/photo/bandwidth-close-up-computer-connection-1148820/&#34; target = &#34;_blank&#34;&gt;
+    &lt;figcaption&gt;Photo by Panumas Nikhomkhai from Pexels&lt;/figcaption&gt;
+    &lt;/a&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;p&gt;While recently learning the basics of SQL, I created a bunch of notes for reference. You will find that these notes are parallel to the following online courses:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://cognitiveclass.ai/courses/learn-sql-relational-databases&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;SQL and Relational Databases 101&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://www.coursera.org/learn/sql-data-science&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Databases and SQL for Data Science&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The course on 
+&lt;a href=&#34;https://cognitiveclass.ai&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;cognitiveclass.ai&lt;/a&gt; is free and  you could follow the materials if you want. SQL for Data Science course is part of coursera&amp;rsquo;s
+
+&lt;a href=&#34;https://www.coursera.org/professional-certificates/ibm-data-science&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;IBM Data Science Professional Certificate&lt;/a&gt; Program and provides a brief introduction to SQL for data science.&lt;/p&gt;
+&lt;h2 id=&#34;the-following-statemetns-arent-really-descriptive-if-that-is-something-you-are-looking-for-its-mostly-a-collection-of-the-basic-syntaxes-with-some-examples-this-is-the-linkhttpsgithubcomsuhailnajeeblearning-sql-to-the-corresponding-github-repository-you-will-find-some-relevant-example-sql-queries-in-the-problemshttpsgithubcomsuhailnajeeblearning-sqltreemasterproblems-folder-of-the-repository&#34;&gt;The following statemetns aren&amp;rsquo;t really descriptive if that is something you are looking for. Its mostly a collection of the basic syntaxes with some examples. This is the 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;link&lt;/a&gt; to the corresponding github repository. You will find some relevant example sql queries in the 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql/tree/master/problems&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Problems&lt;/a&gt; folder of the repository.&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Part 1&lt;/strong&gt; contains a summary of the following topics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Creating Tables:
+&lt;ul&gt;
+&lt;li&gt;CREATE&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Queries:
+&lt;ul&gt;
+&lt;li&gt;SELECT&lt;/li&gt;
+&lt;li&gt;WHERE&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Useful functions for query:
+&lt;ul&gt;
+&lt;li&gt;COUNT&lt;/li&gt;
+&lt;li&gt;DISTINCT&lt;/li&gt;
+&lt;li&gt;LIMIT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;DML Statements:
+&lt;ul&gt;
+&lt;li&gt;INSERT&lt;/li&gt;
+&lt;li&gt;UPDATE&lt;/li&gt;
+&lt;li&gt;DELETE&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-basic-sql-commands&#34;&gt;5 Basic SQL Commands:&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Create&lt;/li&gt;
+&lt;li&gt;Insert&lt;/li&gt;
+&lt;li&gt;Select&lt;/li&gt;
+&lt;li&gt;Update&lt;/li&gt;
+&lt;li&gt;Delete&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;these-commands-are-divided-into-2-types&#34;&gt;These commands are divided into 2 types:&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;DDL Statements (Data Definition Language)
+&lt;ul&gt;
+&lt;li&gt;Define, Change or Drop Data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;DML Statements (Data Manipulation Language)
+&lt;ul&gt;
+&lt;li&gt;Read and Modify Data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;creating-tables&#34;&gt;Creating Tables:&lt;/h1&gt;
+&lt;h2 id=&#34;syntax&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;create table TABLENAME (
+    COLUMN1 datatype,
+    COLUMN2 datatype,
+    COLUMN3 datatype,
+        ...
+    ) ;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples:&lt;/h2&gt;
+&lt;p&gt;Varchar - Variable Character&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;create table TEST (
+    ID integer,
+    NAME varchar(30)
+    );
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Char-Fixed Character&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;create table COUNTRY (
+    ID int,
+    CCODE char(2),
+    NAME varchar(60)
+    );
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Setting the Primary Key to ID&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;create table COUNTRY (
+    ID int NOT NULL,
+    CCODE char(2),
+    NAME varchar(60),
+    PRIMARY KEY (ID)
+    );
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Droping and creating table:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;drop table COUNTRY;
+create table COUNTRY (
+    ID integer PRIMARY KEY NOT NULL,
+    CCODE char(2),
+    NAME varchar(60)
+    );
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;select-statement&#34;&gt;Select Statement:&lt;/h1&gt;
+&lt;p&gt;Used for:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Retreiving Data from the Table.&lt;/li&gt;
+&lt;li&gt;This is a DML Statement&lt;/li&gt;
+&lt;li&gt;Select Statement: Query&lt;/li&gt;
+&lt;li&gt;Result of Select: Result Set/Table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;syntax-1&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from &amp;lt;tablename&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select COLUMN1, COLUMN2, ... from TABLE1;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example:&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;select ID, NAME from COUNTRY;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Retrieve all columns:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from country;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;predicates&#34;&gt;Predicates:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Search conditions&lt;/li&gt;
+&lt;li&gt;Used in the search condition for the WHERE clause&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;WHERE Clause comparison objects:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;=   Equal
+&amp;gt;   Greater than
+&amp;lt;   Less than
+&amp;gt;=  Greater than or equal
+&amp;lt;=  Less than or equal
+&amp;lt;&amp;gt;  Not equal
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;examples-1&#34;&gt;Examples:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from COUNTRY where ID &amp;lt;5;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from COUNTRY where CCODE = &#39;CA&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;count-function&#34;&gt;Count Function:&lt;/h1&gt;
+&lt;p&gt;Built-in function that retrieves the number of rows matching the query criteria.&lt;/p&gt;
+&lt;h2 id=&#34;examples-2&#34;&gt;Examples:&lt;/h2&gt;
+&lt;p&gt;Number of rows in the table:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select COUNT(*) from tablename;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Rows in MEDALS table where the country is Canada&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select COUNT(*) from MEDALS
+    where COUNTRY = &#39;CANADA&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;distinct-function&#34;&gt;Distinct Function:&lt;/h1&gt;
+&lt;p&gt;Used to Remove duplicate values in a result set.&lt;/p&gt;
+&lt;h2 id=&#34;syntax-2&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;p&gt;Retrieve Unique values in a column:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select DISTINCT columnname from tablename
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example-1&#34;&gt;Example:&lt;/h2&gt;
+&lt;p&gt;List of unique Countries that received GOLD medals.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select DISTINCT COUNTRY from MEDALS
+    where MEDALTYPE = &#39;GOLD&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;limit&#34;&gt;Limit:&lt;/h1&gt;
+&lt;p&gt;Restrict the number of rows retrieved from the database.&lt;/p&gt;
+&lt;h2 id=&#34;syntax-3&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;p&gt;Retrieve first 10 rows in a table:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from tablename LIMIT 10
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example-2&#34;&gt;Example:&lt;/h2&gt;
+&lt;p&gt;Retrieve 5 rows in the MEDALS table for the year 2018&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from MEDALS
+    where YEAR = 2018 limit 5
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;insert-statement&#34;&gt;Insert Statement:&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Used for populating a table.&lt;/li&gt;
+&lt;li&gt;DML Statement&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;syntax-4&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;INSERT INTO tablename
+    (Columnname,...,...)
+    VALUES
+    (Value,...,...,...)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example-3&#34;&gt;Example:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;INSERT INTO AUTHOR
+    (AUTHOR_ID, LASTNAME, FIRSTNAME, EMAIL, CITY, COUNTRY)
+    VALUES
+    (&#39;A1&#39;, &#39;CHONG&#39;, &#39;RAUL&#39;, &#39;RFC@ABC.COM&#39;, &#39;TORONTO&#39;, &#39;CA&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Multiple entries:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;INSERT INTO AUTHOR
+    (AUTHOR_ID, LASTNAME, FIRSTNAME, EMAIL, CITY, COUNTRY)
+    VALUES
+    (&#39;A1&#39;, &#39;CHONG&#39;, &#39;RAUL&#39;, &#39;RFC@ABC.COM&#39;, &#39;TORONTO&#39;, &#39;CA&#39;),
+    (&#39;A2&#39;, &#39;DHONG&#39;, &#39;BAUL&#39;, &#39;BFD@ABC.COM&#39;, &#39;TORONTO&#39;, &#39;CA&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;update-statement&#34;&gt;Update Statement:&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;alter the data&lt;/li&gt;
+&lt;li&gt;DML Statement&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;syntax-5&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;UPDATE tablename
+    SET columnname = value
+    WHERE condition
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example-4&#34;&gt;Example:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;UPDATE AUTHOR
+    SET LASTNAME = NAJEEB
+        FIRSTNAME = SUHAIL
+    WHERE AUTHOR_ID = 2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;delete-statement&#34;&gt;Delete Statement:&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Remove rows from the Table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;syntax-6&#34;&gt;Syntax:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;DELETE FROM tablename
+    WHERE condition
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;examples-3&#34;&gt;Examples:&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;DELETE FROM AUTHOR
+    WHERE AUTHOR_ID IN(&#39;A2&#39;,&#39;A3&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;p&gt;You can find some relevant SQL queries 
+&lt;a href=&#34;https://github.com/suhailnajeeb/learning-sql/blob/master/problems/problemset_1.sql&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-2&#34;&gt;Link&lt;/a&gt; to &lt;strong&gt;Part 2&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://suhailnajeeb.github.io/post/sql-fundamentals-part-3&#34;&gt;Link&lt;/a&gt; to &lt;strong&gt;Part 2&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;To be continued ..&lt;/em&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>AI - Where Do We Stand Today?</title>
+      <link>https://suhailnajeeb.github.io/post/ai-2016/</link>
+      <pubDate>Sat, 13 Aug 2016 00:00:00 +0000</pubDate>
+      <guid>https://suhailnajeeb.github.io/post/ai-2016/</guid>
+      <description>&lt;div style = &#34;text-align: justify&#34;&gt;
+&lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
+&lt;p&gt;AI or Artificial Intelligence had been a buzz word of the twenty first century in its early days. However, somehow the world seemed to find more interesting stuff to buzz about. The likes of smart phones, tablets, thinner laptops and cool hardware, gaming, social networking platforms, virtual reality.. the list goes on. All of these had us busy and obsessed while the catch of doing something genuinely cool with AI seemed to be a far cry or not worth much, at least for the time being. However, as of late, it seems like the gorgeous butterfly, done with its 
+&lt;a href=&#34;https://www.zmescience.com/ecology/animals-ecology/how-caterpillar-turn-butterfly-0534534/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Metamorphosis&lt;/a&gt;, is coming out of its cocoon.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://suhailnajeeb.github.io/img/ai-2016/metamorphosis.jpg&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ai&#34;&gt;AI&lt;/h2&gt;
+&lt;p&gt;So, what makes AI so spectacular and noteworthy? Before we can understand the significance of AI or Artificial Intelligence, we must be able to distinguish it from the traditional ‘Intelligence’ that has been part of computers since the beginning of their time. If we look at how computers have worked all these days, they have been solely computational machines, having little human-like intelligence at all. Most of their applications have revolved around codes written to perform different pre-defined tasks which one way or another solely depend upon mathemetical computation. However, Artificial Intelligences don’t necessarily have a fixed algorithm to go about and solve an underlying task. Instead AI takes a human like approach to any provided problem. It analyzes existing sets of data, thereby it can train itself and ‘learn’ from experience, just like humans do. This might not sound like a much for a starter, but as we will see, this ability to improve from experience opens doors to thousands of possibilities.&lt;/p&gt;
+&lt;h2 id=&#34;evolution-of-ai&#34;&gt;Evolution of AI&lt;/h2&gt;
+&lt;p&gt;In its earlier days, artificial intelligence started off with simple logistic 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Regression_analysis&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;regressions&lt;/a&gt; to fit data for either classification or prediction related problems. These regression models were at the core of the 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Machine_learning&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;machine learning&lt;/a&gt; algorithms. However, these simple regression models failed at performing complex tasks with higher degrees of freedom. So machine learning algorithms soon had hit a wall. A new sort of learning algorithm had to be introduced. The new model approached machine learning in a completely different way. Instead of searching for direct relationships between sets of data, the computation would be broken into different hidden layers which would be used to determine a complex set of interrelation between the input data. The input data had to go through multiple layers of computation before finally reaching a reasonable prediction. Further development of 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Deep_learning&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;deep learning&lt;/a&gt; algorithms later seemed to mimic the human brain or neural system. These sorts of networks are often referred to as 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_neural_network&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;neural networks&lt;/a&gt;.&lt;/p&gt;
+&lt;img src = &#34;/img/ai-2016/neural.gif&#34;&gt;
+&lt;h2 id=&#34;overcoming-barriers&#34;&gt;Overcoming Barriers&lt;/h2&gt;
+&lt;p&gt;However, there were certain drawbacks to implement deep and neural nets. The algorithms themselves had mathematical limitations like 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Backpropagation&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;back propagation&lt;/a&gt; errors, the 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Vanishing_gradient_problem&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vanishing gradient problem&lt;/a&gt; etc. Not only that, in order to train this sort of a learning algorithms it would take enormous amount of processing power which the traditional 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Central_processing_unit&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CPU&lt;/a&gt;s could not possibly offer. It could often take years to simply train a deep learning model. Luckily enough, 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Graphics_processing_unit&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GPU&lt;/a&gt;s seemed to  excel in Deep learning problems. As of the last couple of years, GPUs have seen large strides of improvement in both performance and power efficiency, thereby silently providing a greater opening to the world of AI. Concurrently, a great number of scientists and researchers have been working relentlessly during the recent past and have provided us with breakthroughs from time to time to overcome the hurdles in the way of implementing deep learning networks.&lt;/p&gt;
+&lt;h2 id=&#34;ai-around-us&#34;&gt;AI Around Us&lt;/h2&gt;
+&lt;p&gt;The most interesting thing is that we are already using AI all around us. However, most of these may be termed as 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Weak_AI&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ANI (artificial Narrow Intelligence), expert systems or weak AI&lt;/a&gt; – according to different perspectives. But they converge to the same idea - AI which has expertise in a certain field. The list of examples is countless. Starting from the Google searches we run everyday, the 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Anti-spam_techniques&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;anti-spam&lt;/a&gt; filters in our mail inbox, or the recommendations we get on YouTube - AI is vaguely present in our day to day lives and even on our handhelds. However, there are certain aspects of AI which I cannot help but mention.&lt;/p&gt;
+&lt;img src = &#34;/img/ai-2016/assistant.gif&#34;&gt;
+&lt;h2 id=&#34;autonomous-cars&#34;&gt;Autonomous Cars&lt;/h2&gt;
+&lt;p&gt;Thanks to AI, autonomous cars are no more a thing of the future. Extensive research and experiment is already underway lead by giants like Google, Tesla, Apple etc. The 
+&lt;a href=&#34;https://waymo.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Google Self-Driving Car project&lt;/a&gt; has been around for a decent amount of time and we already know enough about it. The 
+&lt;a href=&#34;https://www.tesla.com/presskit/autopilot&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Tesla Autopilot&lt;/a&gt; on the other hand is pretty new to the party, being around only since the late 2015. But the most interesting thing about Tesla Autopilot is that it learns driving as the users drive their vehicles. Note that we are speaking about the ‘users’, not any single user. The whole family of thousands of Tesla cars cruising across the US are connected to each other just like a single entity which enables them to learn at a spectacular pace. Tesla users reported dramatic improvements in the Autopilot system over weeks since the Autopilot system was first rolled out. Tesla Autopilot however is still in Beta stage and there have been reports of accidents putting the program in jeopardy.&lt;/p&gt;
+&lt;img src = &#34;/img/ai-2016/autonomous.gif&#34;&gt;
+&lt;h2 id=&#34;ai-and-scientific-research-the-noble-prize-winning-experiment&#34;&gt;AI and Scientific Research: The noble-prize winning experiment&lt;/h2&gt;
+&lt;p&gt;In 2001, three scientists Eric Cornell, Wolfgang Ketterle and Carl Weiman were jointly awarded the noble prize in physics for being able to create the 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Bose%E2%80%93Einstein_condensate&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bose-Einstein Condensate&lt;/a&gt;, an extremely rare state of matter which they were able to obtain by using precise lasers to nudge and bump atoms and reduce their movement to obtain a very still state. Lately, a group of scientists at the Australian National University decided to recreate this experiment from scratch, but this time using the help of an AI which would be given full control of all the lasers.  Astonishingly, the AI took barely an hour to achieve what the noble prize winning scientists took years of hard work. So it goes beyond any doubt how radical the role of AI might be in the field of scientific research. The application of AI for scientific research knows no limits. Medical science, modern physics, chemistry, astronomy, nuclear physics, nanotechnology.. there is simply no field that AI cannot help but contribute.&lt;/p&gt;
+&lt;img src = &#34;/img/ai-2016/scientist.gif&#34;&gt;
+&lt;h2 id=&#34;ai-in-healthcare-business-and-finance-ibm-watson&#34;&gt;AI in Healthcare, Business and Finance: IBM Watson&lt;/h2&gt;
+&lt;p&gt;If we want to talk about the applications of AI in diversified sectors, we must talk about IBM Watson. 
+&lt;a href=&#34;http://www.ibm.com/watson/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;IBM Watson&lt;/a&gt; is basically a supercomputer created by IBM Corporation but the wizardry behind its diversity lies in the programming used. Watson possesses the ability to skim through data and research material and educate itself just like a human scholar would. Later, it is able to use its knowledge to aid in the respective fields. IBM has opened the platform for developers to benefit from Watson. Watson is already being used to aid in medical and healthcare applications for cancer treatment and has proven its high degree of reliability among the doctors and healthcare specialists. Watson is also likely to be able to provide significant support to business and financial organizations because of its ability to learn through research.&lt;/p&gt;
+&lt;h2 id=&#34;ai-art-music-and-literature&#34;&gt;AI: Art, Music and Literature&lt;/h2&gt;
+&lt;p&gt;Wait. What?  Who would have thought that the world of art and culture would ever be a place for AI? Surprisingly though, AI doesn’t fail to disappoint the haters. If you have caught my previous blog 
+&lt;a href=&#34;http://techdiscourse.weebly.com/blog/no-im-not-talking-about-prisma&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;post&lt;/a&gt; then you might know about 
+&lt;a href=&#34;http://prisma-ai.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Prisma&lt;/a&gt;- the AI that creates artworks comparable to great paintings. My friend 
+&lt;a href=&#34;http://www.shaerahmed.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Shaer Ahmed&lt;/a&gt; took the liberty to dig deeper into the prospect of Art and AI. Feel free to visit his site 
+&lt;a href=&#34;http://www.shaerahmed.com/pragmatic-prisma.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; and learn more.&lt;/p&gt;
+&lt;p&gt;AI has not stopped at artwork. 
+&lt;a href=&#34;https://magenta.tensorflow.org/welcome-to-magenta&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Google Magenta&lt;/a&gt; is a great example to how AI might be used to create music. You won&amp;rsquo;t believe that this is AI production when you listen this:&lt;/p&gt;
+&lt;iframe width=&#34;100%&#34; height=&#34;300&#34; scrolling=&#34;no&#34; frameborder=&#34;no&#34; allow=&#34;autoplay&#34; src=&#34;https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/267107599&amp;color=%23ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true&amp;visual=true&#34;&gt;&lt;/iframe&gt;
+&lt;p&gt;You can head to Redwan Nafi&amp;rsquo;s 
+&lt;a href=&#34;http://redowannafi.weebly.com/project-magenta.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;blog&lt;/a&gt; to find out more .&lt;/p&gt;
+&lt;p&gt;AI enthusiasts didn’t like to keep any stone unturned. They have also tried to implement an AI capable of literary work. There are already a number of news portals based on AI to provide news updates on sports, weather, stock etc. based on real time data. However, to take this to another level, NYU graduate Ross Goodwin created an AI which produced a screenplay dubbed ‘Surprising’. The screenplay might seem pretty creepy.  But hey, its just a start.&lt;/p&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/LY7x2Ihqjmc&#34; frameborder=&#34;0&#34; allow=&#34;accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;AI enthusiasts didn’t like to keep any stone unturned. They have also tried to implement an AI capable of literary work. There are already a number of news portals based on AI to provide news updates on sports, weather, stock etc. based on real time data. However, to take this to another level, NYU graduate Ross Goodwin created an AI which produced a screenplay dubbed ‘Surprising’. The screenplay might seem pretty creepy.  But hey, its just a start.&lt;/p&gt;
+&lt;h2 id=&#34;google-deepmind--talk-of-the-town&#34;&gt;Google Deepmind : Talk of the town&lt;/h2&gt;
+&lt;p&gt;Most of the AIs we have talked about till now(except IBM Watson) were one way or another ANI or Artificial Narrow Intelligence, to obtain expertise in a specific task. AGI or 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Artificial General Intelligence&lt;/a&gt; on the other hand is a different story. By definition, AGI does not posses a fixed instruction set. It has a more general purpose and might be used in a variety of different applications with no alteration at all. We are lucky to have a general purpose AI- 
+&lt;a href=&#34;https://deepmind.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Google Deepmind&lt;/a&gt; surfaced in the AI league.&lt;/p&gt;
+&lt;p&gt;Deepmind technologies was originally a British AI startup founded in September 2010. Later in 2014 it was acquired by google who renamed it to Google Deepmind. The company has been operating relentlessly since, to combine techniques of machine learning and systems neuroscience to build powerful general purpose learning algorithms.&lt;/p&gt;
+&lt;p&gt;An event of late has taken AI researchers by aw, when Google’s general purpose Deepmind AI was able to beat the best human player in the traditional Chinese board game GO. The project termed as google 
+&lt;a href=&#34;https://deepmind.com/alpha-go&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;AlphaGo&lt;/a&gt; has to be seen as a major breakthrough in the world of machine learning since this is the first time in the history that a general purpose AI has been able to pull off a feat like this. Previously AIs like 
+&lt;a href=&#34;http://www.ibm.com/watson/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;IBM’s Watson&lt;/a&gt; beat the best human chess players, but the Chinese board game GO is way more complex for a machine to 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Brute-force_attack&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;brute force&lt;/a&gt; all the possible combinations. Instead of the traditional approach, Deepmind uses a technique called 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Reinforcement_learning&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;reinforcement learning&lt;/a&gt;, which is powered by neural networks, to mimic the human brain. Deepmind only takes inputs through raw pixels and later processes them to find overlaying patterns and combinations. Initially, Deepmind was fed streams of GO games of amateur players playing each other in the game GO. By only watching these games Deepmind had learnt the basics to play GO but it was not particularly good at it. Later, the machine was tasked to play with itself for millions of times and through each game, it became better and better, learning from its own mistakes. This proves the idea that a machine is capable of learning on its own and solidifies the claim of general purpose AI.&lt;/p&gt;
+&lt;img src = &#34;/img/ai-2016/alphago.gif&#34;&gt;
+&lt;h2 id=&#34;wrap-up&#34;&gt;Wrap Up&lt;/h2&gt;
+&lt;p&gt;Artificial intelligence is by far the most significant feat of humans in the era of information and technology. However, the coin has both sides to look at. It is true that artificial intelligence opens up the world to new possibilities. AI can offer a helping hand to excel and improve in every possible way humanity can or cannot imagine. However, the idea of a general purpose intelligence that is capable of improving itself also poses a threat to humanity as well. Any self-improving system runs the risk of achieving the state of accelerated returns – as predicted by researchers which might lead to a super-intelligence greater than us human beings ourselves. However, we are far from the point to judge if this might be a probability or not, but in the mean time I would agree with Dagago Altraide to say that I am ‘Cautiously Optimistic’ about AI. Whether or not AI might pose a threat to humanity is beyond the scope of this article, maybe a story of another day.&lt;/p&gt;
+&lt;/div&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
